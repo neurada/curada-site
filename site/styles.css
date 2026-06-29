@@ -347,8 +347,7 @@ body {
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
-.instr-text-mobile { display: none; }
-#instr-time, #instr-nodes, #instr-nodes-mobile { color: #928E86; }
+#instr-time, #instr-nodes { color: #928E86; }
 .footer-copy {
   font-family: "IBM Plex Mono", monospace;
   font-size: 12px;
@@ -378,14 +377,15 @@ body {
 
   .field-object {
     inset: auto 0 auto 0;
-    top: 64px;
+    top: 60px;
     left: 14px;
     right: 14px;
-    height: clamp(272px, 38vh, 338px);
-    height: clamp(272px, 38svh, 338px);
+    height: clamp(264px, 35vh, 320px);
+    height: clamp(264px, 35svh, 320px);
     z-index: 2;
     overflow: hidden;
     pointer-events: auto;
+    touch-action: pan-y;
     background:
       radial-gradient(62% 70% at 52% 48%, rgba(242,73,42,0.16), rgba(242,73,42,0.035) 42%, rgba(3,4,5,0) 72%),
       rgba(3,4,5,0.01);
@@ -404,9 +404,9 @@ body {
   .veil-left { display: none; }
   .veil-bottom {
     inset: auto 0 auto 0;
-    top: 50px;
-    height: clamp(356px, 54vh, 470px);
-    height: clamp(356px, 54svh, 470px);
+    top: 42px;
+    height: clamp(338px, 49vh, 430px);
+    height: clamp(338px, 49svh, 430px);
     background:
       linear-gradient(to bottom, #030405 0%, rgba(3,4,5,0) 18%),
       linear-gradient(to top, #030405 0%, rgba(3,4,5,0.78) 22%, rgba(3,4,5,0) 58%);
@@ -437,8 +437,8 @@ body {
     flex: none;
     align-items: flex-start;
     min-height: 0;
-    padding: clamp(316px, 47vh, 384px) 0 0;
-    padding: clamp(316px, 47svh, 384px) 0 0;
+    padding: clamp(304px, 43vh, 360px) 0 0;
+    padding: clamp(304px, 43svh, 360px) 0 0;
   }
   .hero-col {
     max-width: 100%;
@@ -509,14 +509,18 @@ body {
   .instrument {
     max-width: 100%;
     align-items: flex-start;
+    gap: 7px;
   }
   .instr-dot { margin-top: 4px; }
   .instr-text {
     white-space: nowrap;
     line-height: 1.3;
   }
-  .instr-text-desktop { display: none; }
-  .instr-text-mobile { display: inline; }
+  .instr-text-desktop {
+    display: inline;
+    font-size: 8.6px;
+    letter-spacing: 0.025em;
+  }
 }
 
 @media (max-width: 380px) {
@@ -525,15 +529,26 @@ body {
     top: 60px;
     left: 12px;
     right: 12px;
-    height: clamp(252px, 38vh, 306px);
-    height: clamp(252px, 38svh, 306px);
+    height: clamp(252px, 35vh, 292px);
+    height: clamp(252px, 35svh, 292px);
   }
   .hero {
-    padding-top: clamp(296px, 47vh, 340px);
-    padding-top: clamp(296px, 47svh, 340px);
+    padding-top: clamp(292px, 43vh, 326px);
+    padding-top: clamp(292px, 43svh, 326px);
   }
   .headline {
     font-size: clamp(29px, 8.9vw, 36px);
+  }
+  .instr-text-desktop {
+    font-size: 8px;
+    letter-spacing: 0.012em;
+  }
+}
+
+@media (max-width: 340px) {
+  .instr-text-desktop {
+    font-size: 7.5px;
+    letter-spacing: 0;
   }
 }
 

@@ -10,15 +10,15 @@
   var DENSITY = 1;     // 0.5 .. 1.6
   var CORE_GLOW = 1;   // 0.4 .. 1.6
 
-  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var mobileMQ = window.matchMedia ? window.matchMedia("(max-width: 768px)") : null;
-  function motionOn() { return !reduce; }
+  function motionOn() { return true; }
   function mobileLayout() { return mobileMQ ? mobileMQ.matches : window.innerWidth <= 768; }
 
   var nodes = [], links = [], W = 0, H = 0, DPR = 1, cx = 0, cy = 0, R = 0;
   var buildR = 1;                  // R at the moment geometry was built (for seamless rescale)
   var hot = 0, hotTarget = 0, mx = -1, my = -1, lastHot = -1;
   var raf = 0, resizeT = 0, idleH = 0;
+  var frameCount = 0;
   var ignite = 0;                  // 0..1 one-shot ignition progress
   var igniteStart = 0;
   var IGNITE_MS = 1100;
@@ -124,6 +124,7 @@
   }
 
   function frame(t) {
+    frameCount++;
     var time = t * 0.001;
     var isMobile = mobileLayout();
     var glow = CORE_GLOW * (isMobile ? 1.22 : 1);
@@ -144,8 +145,8 @@
     var breathe = m ? (0.5 + 0.5 * Math.sin(time * 0.5)) : 0.6;
     var pulse = m ? (0.5 + 0.5 * Math.sin(time * 0.9)) : 0.6;
 
-    var ang = (m ? time * 0.05 : 0.55) + 0.45;
-    var angX = 0.15 * Math.sin(m ? time * 0.12 : 0.5) - 0.05;
+    var ang = (m ? time * (isMobile ? 0.16 : 0.05) : 0.55) + 0.45;
+    var angX = (isMobile ? 0.2 : 0.15) * Math.sin(m ? time * (isMobile ? 0.22 : 0.12) : 0.5) - 0.05;
     var cosY = Math.cos(ang), sinY = Math.sin(ang);
     var cosX = Math.cos(angX), sinX = Math.sin(angX);
     var focal = R * (isMobile ? 2.45 : 2.8);
@@ -153,7 +154,7 @@
 
     // the field stays structurally anchored — no translate on cursor move. only its
     // energy responds (node glow + edge opacity below). a rigid, solid object.
-    var proxRad = R * 0.28, proxRad2 = proxRad * proxRad;
+    var proxRad = R * (isMobile ? 0.38 : 0.28), proxRad2 = proxRad * proxRad;
 
     ctx.clearRect(0, 0, W, H);
 
@@ -162,7 +163,11 @@
       var x = (nd.x + nd.ix * igOffset) * scl;
       var y = (nd.y + nd.iy * igOffset) * scl;
       var z = (nd.z + nd.iz * igOffset) * scl;
-      if (m) { x += Math.sin(time * 0.4 + nd.wx) * 5; y += Math.cos(time * 0.35 + nd.wy) * 5; }
+      if (m) {
+        var drift = isMobile ? 8 : 5;
+        x += Math.sin(time * (isMobile ? 0.72 : 0.4) + nd.wx) * drift;
+        y += Math.cos(time * (isMobile ? 0.62 : 0.35) + nd.wy) * drift;
+      }
       var rx = x * cosY - z * sinY;
       var rz = x * sinY + z * cosY;
       var ry = y * cosX - rz * sinX;
@@ -253,13 +258,25 @@
     }
     ctx.globalCompositeOperation = "source-over";
 
+    window.__curadaFieldState = {
+      frames: frameCount,
+      nodes: nodes.length,
+      mobile: isMobile,
+      motion: m,
+      hot: Math.round(hot * 1000) / 1000,
+      width: W,
+      height: H,
+      dpr: DPR
+    };
+    canvas.dataset.frames = String(frameCount);
+    canvas.dataset.motion = m ? "on" : "off";
+
     if (motionOn()) raf = requestAnimationFrame(frame);
   }
 
   // ---- instrument-state line ----
   var elTime = document.getElementById("instr-time");
   var elNodes = document.getElementById("instr-nodes");
-  var elNodesMobile = document.getElementById("instr-nodes-mobile");
   function pad(n) { return n < 10 ? "0" + n : "" + n; }
   function updateInstrumentTime() {
     if (!elTime) return;
@@ -269,7 +286,6 @@
   }
   function updateInstrumentNodes() {
     if (elNodes) elNodes.textContent = nodes.length.toLocaleString("en-US");
-    if (elNodesMobile) elNodesMobile.textContent = nodes.length.toLocaleString("en-US");
   }
 
   function scheduleRebuild() {
@@ -306,7 +322,12 @@
     mx = e.clientX - r.left; my = e.clientY - r.top;
   }
   window.addEventListener("mousemove", updatePointer, { passive: true });
+  window.addEventListener("pointerdown", updatePointer, { passive: true });
   window.addEventListener("pointermove", updatePointer, { passive: true });
+  window.addEventListener("touchstart", function (e) {
+    if (!e.touches || !e.touches.length) return;
+    updatePointer(e.touches[0]);
+  }, { passive: true });
   window.addEventListener("touchmove", function (e) {
     if (!e.touches || !e.touches.length) return;
     updatePointer(e.touches[0]);
