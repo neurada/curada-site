@@ -1,0 +1,405 @@
+/* Curada — static site styles */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #030405;
+  height: 100%;
+}
+
+body {
+  color: #F2F0EA;
+  font-family: "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,42,31,0.55), 0 0 11px 2px rgba(255,42,31,0.55); }
+  50%      { box-shadow: 0 0 0 6px rgba(255,42,31,0), 0 0 18px 4px rgba(255,42,31,0.9); }
+}
+
+/* ---- stage / canvas ---- */
+.stage {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #030405;
+}
+
+.net-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  display: block;
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.veil-left {
+  background: linear-gradient(102deg, #030405 0%, rgba(3,4,5,0.86) 26%, rgba(3,4,5,0.42) 46%, rgba(3,4,5,0) 64%);
+}
+.veil-bottom {
+  background: linear-gradient(to top, rgba(3,4,5,0.92) 0%, rgba(3,4,5,0) 20%);
+}
+.veil-vignette {
+  background: radial-gradient(120% 120% at 50% 50%, rgba(0,0,0,0) 62%, rgba(0,0,0,0.55) 100%);
+}
+
+/* ---- right-edge measure ticks ---- */
+.rail-ticks {
+  position: absolute;
+  right: clamp(14px, 2.2vw, 40px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  pointer-events: none;
+  opacity: 0.62;
+}
+.tick-plus { color: #F2492A; font-size: 14px; line-height: 1; font-family: "IBM Plex Mono", monospace; }
+.tick-f    { color: #F2492A; font-size: 13px; line-height: 1; font-family: "IBM Plex Mono", monospace; margin-top: 2px; }
+.tick      { width: 11px; height: 1px; background: rgba(242,240,234,0.3); }
+.tick-lg   { width: 22px; background: rgba(242,240,234,0.5); }
+.rail-mark {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.24em;
+  color: #5A574F;
+  opacity: 0.72;
+  margin-top: 9px;
+}
+
+/* ---- content shell ---- */
+.content {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  min-height: 100svh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(26px, 3.4vw, 52px) clamp(26px, 3.6vw, 58px);
+}
+
+/* ---- brand ---- */
+/* periodic-cell composition, measured off the reference:
+   the square is ~2.4× Cu's cap-height, so the symbol floats with air;
+   Curada is set at the SAME cap-height as Cu, in light thin type. */
+.brand { display: inline-flex; align-self: flex-start; align-items: baseline; gap: clamp(9px, 0.9vw, 11px); }
+.cu-cell {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: flex-end;      /* Cu seats LOW in the cell */
+  justify-content: center;
+  padding-bottom: 5px;        /* big empty field above, quiet sliver below */
+  border: 1px solid rgba(242,240,234,0.28);
+  overflow: hidden;
+}
+/* ember stays dark until hover — no wedding lights at rest */
+.cu-cell::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -4%;
+  width: 84%;
+  height: 56%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(255,58,20,0.45) 0%, rgba(255,58,20,0) 72%);
+  filter: blur(3px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 320ms ease, transform 320ms ease;
+}
+.name-cell { display: flex; align-items: flex-end; }
+.brand-mark {
+  position: relative;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1;
+  color: #F2492A;           /* calm copper, unlit */
+  letter-spacing: 0;
+  transition: color 240ms ease, text-shadow 240ms ease;
+}
+.brand-name {
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 1;
+  color: #E4E1D9;
+  letter-spacing: 0.012em;
+}
+
+/* easter egg — only on hover does Cu ignite, like the FDA program lamps */
+.brand:hover .cu-cell::before { opacity: 1; transform: translateX(-50%) scale(1.1); }
+.brand:hover .cu-cell { border-color: rgba(242,240,234,0.40); }
+.brand:hover .brand-mark {
+  color: #FF5A38;
+  animation: cuBurn 2.6s ease-in-out infinite;
+}
+@keyframes cuBurn {
+  0%, 100% { text-shadow: 0 0 7px rgba(255,58,20,0.55), 0 0 16px rgba(255,58,20,0.30); }
+  50%      { text-shadow: 0 0 13px rgba(255,58,20,0.90), 0 0 28px rgba(255,58,20,0.55); }
+}
+
+/* easter egg — hover and the ember flares, like the FDA program lamps.
+   Cu and Curada keep their exact size & position; only the glow intensifies. */
+.brand:hover .cu-cell::before { opacity: 1; transform: translateX(-50%) scale(1.12); }
+.brand:hover .cu-cell { border-color: rgba(242,240,234,0.40); }
+.brand:hover .brand-mark {
+  color: #FF5A38;
+  animation: cuBurn 2.6s ease-in-out infinite;
+}
+@keyframes cuBurn {
+  0%, 100% { text-shadow: 0 0 7px rgba(255,58,20,0.55), 0 0 16px rgba(255,58,20,0.30); }
+  50%      { text-shadow: 0 0 13px rgba(255,58,20,0.90), 0 0 28px rgba(255,58,20,0.55); }
+}
+
+/* ---- hero ---- */
+.hero {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-height: 0;
+  padding: clamp(8px, 2vh, 24px) 0;
+}
+.hero-col { width: 100%; max-width: min(620px, 58vw); }
+
+.eyebrow {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: #F2492A;
+  margin: 0 0 clamp(16px, 2.4vh, 26px);
+}
+
+.headline {
+  margin: 0;
+  font-weight: 300;
+  font-size: clamp(34px, min(5.2vw, 7vh), 68px);
+  line-height: 1.04;
+  letter-spacing: -0.012em;
+  color: #F2F0EA;
+  text-wrap: balance;
+}
+.headline-em {
+  font-family: "Newsreader", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  color: #F2492A;
+  letter-spacing: 0;
+}
+
+/* ---- technical rail ---- */
+.tech-rail { margin-top: clamp(30px, 4.2vh, 48px); max-width: 600px; }
+.rail-row { display: flex; border-top: 1px solid rgba(242,240,234,0.16); }
+.rail-cell {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 13px 9px 0;
+}
+.rail-cell-bordered { padding: 9px 13px; border-left: 1px solid rgba(242,240,234,0.10); }
+.rail-cell-bordered:last-child { padding: 9px 0 9px 13px; }
+.rail-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: #928E86;
+}
+.rail-plus {
+  color: #F2F0EA;
+  font-size: 10px;
+  opacity: 0.45;
+  font-family: "IBM Plex Mono", monospace;
+}
+.rail-underline { height: 1px; background: rgba(242,240,234,0.08); }
+
+/* ---- FDA programs ---- */
+.programs { margin-top: clamp(28px, 4.4vh, 50px); max-width: 600px; }
+.program-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 15px 6px;
+  border-bottom: 1px dotted rgba(242,240,234,0.16);
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+.program-row:hover { background: rgba(242,73,42,0.05); }
+.program-dot {
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #FF3A1F;
+  animation: dotPulse 3.4s ease-in-out infinite;
+}
+.program-dot-delay { animation-delay: 0.9s; }
+.program-body { flex: 1; min-width: 0; }
+.program-kicker {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: #928E86;
+  margin-bottom: 5px;
+}
+.program-name {
+  font-size: clamp(17px, 1.7vw, 21px);
+  font-weight: 300;
+  color: #F2F0EA;
+  letter-spacing: 0.005em;
+}
+.program-index {
+  flex: 0 0 auto;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 15px;
+  color: #F2492A;
+  letter-spacing: 0.02em;
+}
+
+/* ---- footer ---- */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.footer-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  color: #F2492A;
+  margin-bottom: 7px;
+  letter-spacing: 0.01em;
+}
+.email-link {
+  color: #F2F0EA;
+  text-decoration: none;
+  font-size: 15px;
+  letter-spacing: 0.005em;
+  border-bottom: 1px solid rgba(242,240,234,0);
+  transition: border-color 0.3s;
+}
+.email-link:hover { border-bottom-color: rgba(242,73,42,0.6); }
+.footer-affil {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: #D9D6CE;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding-bottom: 1px;
+}
+.affil-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #F2492A;
+  box-shadow: 0 0 6px 1px rgba(255,42,31,0.6);
+}
+.instrument {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-bottom: 1px;
+}
+.instr-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #FF3A1F;
+  flex: 0 0 auto;
+  animation: dotPulse 3.4s ease-in-out infinite;
+}
+.instr-text {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: #7E7A72;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+#instr-time, #instr-nodes { color: #928E86; }
+.footer-copy {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  color: #7E7A72;
+  letter-spacing: 0.01em;
+  padding-bottom: 1px;
+}
+
+/* ---- mobile: dedicated vertical composition (field on top, text below) ---- */
+@media (max-width: 760px) {
+  body { overflow-y: auto; }
+
+  .stage { min-height: 100svh; }
+
+  /* network object occupies the top band, anchored above the text */
+  .net-canvas {
+    height: 56vh;
+    height: 56svh;
+    bottom: auto;
+  }
+  .veil-left { display: none; }
+  .veil-bottom {
+    background: linear-gradient(to top, #030405 0%, rgba(3,4,5,0.7) 30%, rgba(3,4,5,0) 56%);
+  }
+  .veil-vignette { display: none; }
+  .rail-ticks { display: none; }
+
+  .content {
+    justify-content: flex-start;
+    padding: 22px 22px 28px;
+  }
+
+  /* push the hero text into the lower portion, under the field */
+  .hero {
+    flex: none;
+    align-items: flex-end;
+    min-height: 52vh;
+    min-height: 52svh;
+    padding: 0;
+  }
+  .hero-col { max-width: 100%; }
+
+  .headline { font-size: clamp(30px, 8.6vw, 44px); }
+  .eyebrow { margin-bottom: 14px; }
+
+  .rail-label { font-size: 9.5px; letter-spacing: 0.1em; }
+  .rail-cell, .rail-cell-bordered { padding-left: 8px; padding-right: 8px; }
+
+  .programs { margin-top: 26px; }
+
+  .footer {
+    margin-top: 30px;
+    gap: 14px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

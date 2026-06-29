@@ -1,0 +1,18 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.curada.bio" }],
+      "destination": "https://curada.bio/:path*",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(styles.css|script.js)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }]
+    }
+  ]
+}

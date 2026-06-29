@@ -1,0 +1,5 @@
+# Redirect www to the canonical apex domain.
+# Netlify reads hostnames here; on Cloudflare Pages set the same
+# www -> apex redirect as a Redirect Rule (see README).
+http://www.curada.bio/*    https://curada.bio/:splat    301!
+https://www.curada.bio/*   https://curada.bio/:splat    301!
