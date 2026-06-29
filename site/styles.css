@@ -33,12 +33,18 @@ body {
   background: #030405;
 }
 
+.field-object {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
 .net-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
   display: block;
 }
 
@@ -370,23 +376,40 @@ body {
     overflow-y: visible;
   }
 
-  .net-canvas {
+  .field-object {
     inset: auto 0 auto 0;
-    top: 58px;
+    top: 64px;
+    left: 14px;
+    right: 14px;
+    height: clamp(272px, 38vh, 338px);
+    height: clamp(272px, 38svh, 338px);
+    z-index: 2;
+    overflow: hidden;
+    pointer-events: auto;
+    background:
+      radial-gradient(62% 70% at 52% 48%, rgba(242,73,42,0.16), rgba(242,73,42,0.035) 42%, rgba(3,4,5,0) 72%),
+      rgba(3,4,5,0.01);
+    box-shadow:
+      inset 0 0 0 1px rgba(242,240,234,0.045),
+      0 24px 54px rgba(0,0,0,0.42);
+  }
+
+  .net-canvas {
+    inset: 0;
     width: 100%;
-    height: clamp(248px, 42vh, 356px);
-    height: clamp(248px, 42svh, 356px);
+    height: 100%;
+    filter: saturate(1.18) contrast(1.08);
   }
 
   .veil-left { display: none; }
   .veil-bottom {
     inset: auto 0 auto 0;
-    top: 42px;
-    height: clamp(320px, 56vh, 452px);
-    height: clamp(320px, 56svh, 452px);
+    top: 50px;
+    height: clamp(356px, 54vh, 470px);
+    height: clamp(356px, 54svh, 470px);
     background:
-      linear-gradient(to bottom, #030405 0%, rgba(3,4,5,0) 22%),
-      linear-gradient(to top, #030405 0%, rgba(3,4,5,0.86) 24%, rgba(3,4,5,0) 58%);
+      linear-gradient(to bottom, #030405 0%, rgba(3,4,5,0) 18%),
+      linear-gradient(to top, #030405 0%, rgba(3,4,5,0.78) 22%, rgba(3,4,5,0) 58%);
   }
   .veil-vignette {
     background: radial-gradient(105% 72% at 50% 34%, rgba(0,0,0,0) 42%, rgba(3,4,5,0.42) 100%);
@@ -414,8 +437,8 @@ body {
     flex: none;
     align-items: flex-start;
     min-height: 0;
-    padding: clamp(268px, 44vh, 342px) 0 0;
-    padding: clamp(268px, 44svh, 342px) 0 0;
+    padding: clamp(316px, 47vh, 384px) 0 0;
+    padding: clamp(316px, 47svh, 384px) 0 0;
   }
   .hero-col {
     max-width: 100%;
@@ -498,14 +521,16 @@ body {
 
 @media (max-width: 380px) {
   .content { padding: 16px 16px 22px; }
-  .net-canvas {
-    top: 54px;
-    height: clamp(238px, 40vh, 320px);
-    height: clamp(238px, 40svh, 320px);
+  .field-object {
+    top: 60px;
+    left: 12px;
+    right: 12px;
+    height: clamp(252px, 38vh, 306px);
+    height: clamp(252px, 38svh, 306px);
   }
   .hero {
-    padding-top: clamp(248px, 42vh, 312px);
-    padding-top: clamp(248px, 42svh, 312px);
+    padding-top: clamp(296px, 47vh, 340px);
+    padding-top: clamp(296px, 47svh, 340px);
   }
   .headline {
     font-size: clamp(29px, 8.9vw, 36px);

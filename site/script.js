@@ -43,8 +43,8 @@
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     if (mobileLayout()) {
       cx = W * 0.50;
-      cy = H * 0.48;
-      R = Math.min(W * 0.74, H * 0.80);
+      cy = H * 0.50;
+      R = Math.min(W * 0.67, H * 0.78);
     } else {
       cx = W * (W > 1100 ? 0.70 : (W > 760 ? 0.66 : 0.50));
       cy = H * (W > 760 ? 0.41 : 0.46);
@@ -125,7 +125,8 @@
 
   function frame(t) {
     var time = t * 0.001;
-    var glow = CORE_GLOW;
+    var isMobile = mobileLayout();
+    var glow = CORE_GLOW * (isMobile ? 1.22 : 1);
     var m = motionOn();
 
     if (igniteStart === 0) igniteStart = t;
@@ -147,7 +148,7 @@
     var angX = 0.15 * Math.sin(m ? time * 0.12 : 0.5) - 0.05;
     var cosY = Math.cos(ang), sinY = Math.sin(ang);
     var cosX = Math.cos(angX), sinX = Math.sin(angX);
-    var focal = R * 2.8;
+    var focal = R * (isMobile ? 2.45 : 2.8);
     var scl = R / buildR;          // seamless rescale of pre-built geometry
 
     // the field stays structurally anchored — no translate on cursor move. only its
@@ -209,11 +210,11 @@
       var dtl = 1 - Math.min(1, Math.max(0, (depth + R) / (2 * R)));
       var ep = LA._prox > LB._prox ? LA._prox : LB._prox;   // nearer endpoint drives edge response
       if (lcore > 0.28) {
-        var la = (0.10 + lcore * 0.42) * (0.55 + 0.45 * breathe) * (0.4 + 0.6 * dtl) * (1 + hot * 0.7) * (1 + ep * 0.7) * linkFade;
+        var la = (0.10 + lcore * 0.42) * (0.55 + 0.45 * breathe) * (0.4 + 0.6 * dtl) * (1 + hot * 0.7) * (1 + ep * 0.7) * linkFade * (isMobile ? 1.18 : 1);
         ctx.strokeStyle = "rgba(255," + Math.round(58 + lcore * 38) + ",32," + Math.min(0.95, la) + ")";
         ctx.lineWidth = (lcore > 0.55 ? 1.0 : 0.7) * (0.7 + 0.5 * dtl);
       } else {
-        var pa = (0.055 + 0.20 * dtl) * (1 + hot * 0.5) * (1 + ep * 1.1) * linkFade;
+        var pa = (0.055 + 0.20 * dtl) * (1 + hot * 0.5) * (1 + ep * 1.1) * linkFade * (isMobile ? 1.28 : 1);
         ctx.strokeStyle = "rgba(" + Math.round(214 + ep * 41) + "," + Math.round(220 - ep * 150) + "," + Math.round(228 - ep * 180) + "," + Math.min(0.6, pa) + ")";
         ctx.lineWidth = 0.55 + 0.45 * dtl;
       }
@@ -227,7 +228,7 @@
       if (sd.core > 0.18) continue;
       var dts = 1 - Math.min(1, Math.max(0, (sd._dz + R) / (2 * R)));
       var flickS = m ? (0.7 + 0.3 * Math.sin(time * sd.fs * 1.2 + sd.ph)) : 0.85;
-      var as = (0.11 + 0.4 * dts) * flickS * (1 + sd._prox * 0.6);
+      var as = (0.11 + 0.4 * dts) * flickS * (1 + sd._prox * 0.6) * (isMobile ? 1.22 : 1);
       ctx.fillStyle = "rgba(218,223,230," + Math.min(0.95, as) + ")";
       ctx.beginPath(); ctx.arc(sd._px, sd._py, Math.max(0.4, sd.sz * 0.6 * sd._s), 0, 6.2832); ctx.fill();
     }
@@ -246,7 +247,7 @@
       if (fd.core <= 0.18) continue;
       var dtf = 1 - Math.min(1, Math.max(0, (fd._dz + R) / (2 * R)));
       var flickF = m ? (0.66 + 0.34 * Math.sin(time * fd.fs * 1.3 + fd.ph)) : 0.82;
-      var af = (0.22 + fd.core * 0.34) * flickF * (0.7 + 0.3 * dtf) * (1 + hot * 0.45) * (1 + fd._prox * 0.5) * igGlow;
+      var af = (0.22 + fd.core * 0.34) * flickF * (0.7 + 0.3 * dtf) * (1 + hot * 0.45) * (1 + fd._prox * 0.5) * igGlow * (isMobile ? 1.14 : 1);
       ctx.fillStyle = "rgba(255," + Math.round(38 + fd.core * 20) + ",24," + Math.min(0.82, af) + ")";
       ctx.beginPath(); ctx.arc(fd._px, fd._py, fd.sz * (0.85 + fd.core * 0.7) * fd._s, 0, 6.2832); ctx.fill();
     }
