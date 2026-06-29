@@ -11,7 +11,9 @@
   var CORE_GLOW = 1;   // 0.4 .. 1.6
 
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var mobileMQ = window.matchMedia ? window.matchMedia("(max-width: 768px)") : null;
   function motionOn() { return !reduce; }
+  function mobileLayout() { return mobileMQ ? mobileMQ.matches : window.innerWidth <= 768; }
 
   var nodes = [], links = [], W = 0, H = 0, DPR = 1, cx = 0, cy = 0, R = 0;
   var buildR = 1;                  // R at the moment geometry was built (for seamless rescale)
@@ -39,9 +41,15 @@
       canvas.width = pw; canvas.height = ph;
     }
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    cx = W * (W > 1100 ? 0.70 : (W > 760 ? 0.66 : 0.50));
-    cy = H * (W > 760 ? 0.41 : 0.46);
-    R = Math.min(W * 0.50, H * 0.74);
+    if (mobileLayout()) {
+      cx = W * 0.50;
+      cy = H * 0.48;
+      R = Math.min(W * 0.74, H * 0.80);
+    } else {
+      cx = W * (W > 1100 ? 0.70 : (W > 760 ? 0.66 : 0.50));
+      cy = H * (W > 760 ? 0.41 : 0.46);
+      R = Math.min(W * 0.50, H * 0.74);
+    }
   }
 
   // heavy geometry build (node distribution + 3D kNN links) — run once, then only on idle after a resize
@@ -49,7 +57,7 @@
     reflow();
     buildR = R;
     var area = W * H;
-    var N = Math.round(Math.min(1180, Math.max(620, area / 1300)) * DENSITY);
+    var N = mobileLayout() ? 620 : Math.round(Math.min(1180, Math.max(620, area / 1300)) * DENSITY);
 
     var filaments = [];
     var NF = 6;
@@ -250,6 +258,7 @@
   // ---- instrument-state line ----
   var elTime = document.getElementById("instr-time");
   var elNodes = document.getElementById("instr-nodes");
+  var elNodesMobile = document.getElementById("instr-nodes-mobile");
   function pad(n) { return n < 10 ? "0" + n : "" + n; }
   function updateInstrumentTime() {
     if (!elTime) return;
@@ -259,6 +268,7 @@
   }
   function updateInstrumentNodes() {
     if (elNodes) elNodes.textContent = nodes.length.toLocaleString("en-US");
+    if (elNodesMobile) elNodesMobile.textContent = nodes.length.toLocaleString("en-US");
   }
 
   function scheduleRebuild() {
@@ -275,17 +285,33 @@
     frame(typeof performance !== "undefined" ? performance.now() : 0);
   }
 
-  window.addEventListener("resize", function () {
+  function handleResize() {
     reflow();                       // immediate, seamless: canvas + frame rescale, no flash
     clearTimeout(resizeT);
     resizeT = setTimeout(scheduleRebuild, 220);  // refresh density off the critical path
-  }, { passive: true });
+  }
 
-  window.addEventListener("mousemove", function (e) {
+  window.addEventListener("resize", handleResize, { passive: true });
+  window.addEventListener("orientationchange", function () {
+    clearTimeout(resizeT);
+    resizeT = setTimeout(handleResize, 180);
+  }, { passive: true });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", handleResize, { passive: true });
+  }
+
+  function updatePointer(e) {
     var r = canvas.getBoundingClientRect();
     mx = e.clientX - r.left; my = e.clientY - r.top;
+  }
+  window.addEventListener("mousemove", updatePointer, { passive: true });
+  window.addEventListener("pointermove", updatePointer, { passive: true });
+  window.addEventListener("touchmove", function (e) {
+    if (!e.touches || !e.touches.length) return;
+    updatePointer(e.touches[0]);
   }, { passive: true });
   window.addEventListener("mouseout", function () { mx = -1; my = -1; });
+  window.addEventListener("pointerleave", function () { mx = -1; my = -1; });
 
   document.addEventListener("visibilitychange", function () {
     if (document.hidden) {

@@ -341,7 +341,8 @@ body {
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
-#instr-time, #instr-nodes { color: #928E86; }
+.instr-text-mobile { display: none; }
+#instr-time, #instr-nodes, #instr-nodes-mobile { color: #928E86; }
 .footer-copy {
   font-family: "IBM Plex Mono", monospace;
   font-size: 12px;
@@ -350,53 +351,164 @@ body {
   padding-bottom: 1px;
 }
 
-/* ---- mobile: dedicated vertical composition (field on top, text below) ---- */
-@media (max-width: 760px) {
-  body { overflow-y: auto; }
-
-  .stage { min-height: 100svh; }
-
-  /* network object occupies the top band, anchored above the text */
-  .net-canvas {
-    height: 56vh;
-    height: 56svh;
-    bottom: auto;
+/* ---- mobile: dedicated vertical composition, not a squeezed desktop ---- */
+@media (max-width: 768px) {
+  html, body {
+    height: auto;
+    min-height: 100%;
   }
+
+  body {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .stage {
+    min-height: 100vh;
+    min-height: 100svh;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  .net-canvas {
+    inset: auto 0 auto 0;
+    top: 58px;
+    width: 100%;
+    height: clamp(248px, 42vh, 356px);
+    height: clamp(248px, 42svh, 356px);
+  }
+
   .veil-left { display: none; }
   .veil-bottom {
-    background: linear-gradient(to top, #030405 0%, rgba(3,4,5,0.7) 30%, rgba(3,4,5,0) 56%);
+    inset: auto 0 auto 0;
+    top: 42px;
+    height: clamp(320px, 56vh, 452px);
+    height: clamp(320px, 56svh, 452px);
+    background:
+      linear-gradient(to bottom, #030405 0%, rgba(3,4,5,0) 22%),
+      linear-gradient(to top, #030405 0%, rgba(3,4,5,0.86) 24%, rgba(3,4,5,0) 58%);
   }
-  .veil-vignette { display: none; }
+  .veil-vignette {
+    background: radial-gradient(105% 72% at 50% 34%, rgba(0,0,0,0) 42%, rgba(3,4,5,0.42) 100%);
+  }
   .rail-ticks { display: none; }
 
   .content {
+    min-height: auto;
     justify-content: flex-start;
-    padding: 22px 22px 28px;
+    padding: 18px 18px 24px;
   }
 
-  /* push the hero text into the lower portion, under the field */
+  .brand {
+    gap: 9px;
+  }
+  .cu-cell {
+    width: 40px;
+    height: 40px;
+    padding-bottom: 4px;
+  }
+  .brand-mark { font-size: 20px; }
+  .brand-name { font-size: 19px; }
+
   .hero {
     flex: none;
-    align-items: flex-end;
-    min-height: 52vh;
-    min-height: 52svh;
-    padding: 0;
+    align-items: flex-start;
+    min-height: 0;
+    padding: clamp(268px, 44vh, 342px) 0 0;
+    padding: clamp(268px, 44svh, 342px) 0 0;
   }
-  .hero-col { max-width: 100%; }
+  .hero-col {
+    max-width: 100%;
+  }
 
-  .headline { font-size: clamp(30px, 8.6vw, 44px); }
-  .eyebrow { margin-bottom: 14px; }
+  .eyebrow {
+    margin-bottom: 12px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+  .headline br { display: none; }
+  .headline {
+    max-width: 100%;
+    font-size: clamp(31px, 9.15vw, 42px);
+    line-height: 1.03;
+    letter-spacing: -0.006em;
+    text-wrap: balance;
+  }
 
-  .rail-label { font-size: 9.5px; letter-spacing: 0.1em; }
-  .rail-cell, .rail-cell-bordered { padding-left: 8px; padding-right: 8px; }
+  .tech-rail {
+    margin-top: 25px;
+    max-width: 100%;
+  }
+  .rail-row {
+    flex-direction: column;
+    border-top-color: rgba(242,240,234,0.18);
+  }
+  .rail-cell,
+  .rail-cell-bordered,
+  .rail-cell-bordered:last-child {
+    min-height: 35px;
+    padding: 10px 0;
+    border-left: 0;
+    border-top: 1px solid rgba(242,240,234,0.10);
+  }
+  .rail-row .rail-cell:first-child { border-top: 0; }
+  .rail-label {
+    font-size: 9.2px;
+    letter-spacing: 0.09em;
+    white-space: nowrap;
+  }
 
-  .programs { margin-top: 26px; }
+  .programs {
+    margin-top: 23px;
+    max-width: 100%;
+  }
+  .program-row {
+    gap: 12px;
+    padding: 13px 0;
+  }
+  .program-kicker {
+    font-size: 9.4px;
+    letter-spacing: 0.08em;
+  }
+  .program-name {
+    font-size: clamp(17px, 4.85vw, 20px);
+    line-height: 1.14;
+  }
+  .program-index { font-size: 13px; }
 
   .footer {
-    margin-top: 30px;
-    gap: 14px;
+    margin-top: 28px;
+    gap: 13px;
     align-items: flex-start;
     flex-direction: column;
+  }
+  .email-link { font-size: 14px; }
+  .instrument {
+    max-width: 100%;
+    align-items: flex-start;
+  }
+  .instr-dot { margin-top: 4px; }
+  .instr-text {
+    white-space: nowrap;
+    line-height: 1.3;
+  }
+  .instr-text-desktop { display: none; }
+  .instr-text-mobile { display: inline; }
+}
+
+@media (max-width: 380px) {
+  .content { padding: 16px 16px 22px; }
+  .net-canvas {
+    top: 54px;
+    height: clamp(238px, 40vh, 320px);
+    height: clamp(238px, 40svh, 320px);
+  }
+  .hero {
+    padding-top: clamp(248px, 42vh, 312px);
+    padding-top: clamp(248px, 42svh, 312px);
+  }
+  .headline {
+    font-size: clamp(29px, 8.9vw, 36px);
   }
 }
 
