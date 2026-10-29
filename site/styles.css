@@ -248,7 +248,7 @@ body {
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 300;
-  font-size: clamp(25px, 2.65vw, 40px);
+  font-size: 25px;
   line-height: 1.17;
   letter-spacing: -0.026em;
   color: var(--ink);
