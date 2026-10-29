@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Curada — Countdown</title>
+  <meta name="description" content="Curada countdown.">
+  <link rel="canonical" href="https://curada.bio/countdown/">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#030405">
+  <link rel="preconnect" href="https://w2.countingdownto.com">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: #030405;
+      color: #f2f0ea;
+      font-family: "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: clamp(24px, 5vw, 56px);
+    }
+
+    .page {
+      width: min(100%, 520px);
+      display: grid;
+      gap: 34px;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 10px;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .cu-cell {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 5px;
+      border: 1px solid rgba(242, 240, 234, 0.28);
+    }
+
+    .brand-mark {
+      color: #f2492a;
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .brand-name {
+      color: #e4e1d9;
+      font-size: 22px;
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: 0.012em;
+    }
+
+    h1 {
+      margin: 0;
+      color: rgba(242, 240, 234, 0.62);
+      font-family: "IBM Plex Mono", "Courier New", monospace;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .countdown-frame {
+      width: 300px;
+      max-width: 100%;
+      height: 154px;
+      border: 0;
+      display: block;
+    }
+  </style>
+  <!-- Cloudflare Web Analytics -->
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"0bbee779de9a49f89891a6e403c47b46"}'></script>
+  <!-- End Cloudflare Web Analytics -->
+</head>
+<body>
+  <main class="page">
+    <a class="brand" href="/" aria-label="Curada home">
+      <span class="cu-cell"><span class="brand-mark">Cu</span></span>
+      <span class="brand-name">Curada</span>
+    </a>
+    <h1>Countdown</h1>
+    <iframe class="countdown-frame" width="300" height="154" src="https://w2.countingdownto.com/7259309" frameborder="0" title="Curada countdown"></iframe>
+  </main>
+</body>
+</html>

@@ -1,2 +1,8 @@
 # Cloudflare does not support domain-level redirects in _redirects.
 # Configure www.curada.bio -> curada.bio as a Cloudflare Redirect Rule.
+/library /filings 301
+/library/ /filings/ 301
+/library/files/* /filings/files/:splat 301
+/papers /filings 301
+/papers/ /filings/ 301
+/papers/files/* /filings/files/:splat 301

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#18211D" stroke-opacity=".045"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#F4F6F1"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <g fill="none" stroke="#2D6B55" stroke-opacity=".24" stroke-width="1">
+    <path d="M770 122L861 174 940 116 1013 206 1110 168M770 122L809 256 900 304 1013 206M809 256L744 365 868 432 900 304M900 304L1001 382 1095 321 1110 168M868 432L982 508 1001 382M744 365L691 482 868 432"/>
+    <path d="M838 92L900 304 1081 494M730 203L900 304 1128 247M691 482L900 304 1095 321" stroke-opacity=".12"/>
+  </g>
+  <g fill="#FF5D3A" opacity=".72">
+    <circle cx="770" cy="122" r="5"/><circle cx="940" cy="116" r="4"/><circle cx="1110" cy="168" r="6"/>
+    <circle cx="744" cy="365" r="4"/><circle cx="1095" cy="321" r="5"/><circle cx="691" cy="482" r="4"/>
+  </g>
+  <g fill="#DFF76A" stroke="#1F503F" stroke-width="2">
+    <circle cx="900" cy="304" r="18"/><circle cx="861" cy="174" r="8"/><circle cx="809" cy="256" r="9"/>
+    <circle cx="1001" cy="382" r="8"/><circle cx="868" cy="432" r="7"/>
+  </g>
+  <g font-family="Helvetica Neue, Arial, sans-serif" fill="#18211D">
+    <rect x="66" y="58" width="58" height="58" fill="#F4F6F1" stroke="#18211D"/>
+    <text x="95" y="100" text-anchor="middle" font-size="31" fill="#18211D">Cu</text>
+    <text x="143" y="100" font-size="31" font-weight="300">Curada</text>
+    <text x="66" y="214" font-family="Courier New, monospace" font-size="17" letter-spacing="2" fill="#2D6B55">TECHNOLOGY FOR APPROVED DRUGS</text>
+    <text x="66" y="296" font-size="51" font-weight="300">Engineering label-consistent use</text>
+    <text x="66" y="360" font-size="51" font-weight="300">for approved drugs at</text>
+    <text x="66" y="426" font-family="Georgia, serif" font-size="57" font-style="italic" fill="#FF5D3A">full therapeutic power.</text>
+    <line x1="66" y1="500" x2="617" y2="500" stroke="#18211D" stroke-opacity=".24"/>
+    <text x="66" y="535" font-family="Courier New, monospace" font-size="14" letter-spacing="1.4" fill="#5F6A64">REGULATORY SCIENCE  +  NETWORK PHYSICS  +  HARDWARE</text>
+  </g>
+</svg>
